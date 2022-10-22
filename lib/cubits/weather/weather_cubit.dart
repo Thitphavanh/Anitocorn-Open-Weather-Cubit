@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 import 'package:anitocorn_open_weather_cubit/models/custom_error.dart';
 import 'package:anitocorn_open_weather_cubit/models/weather.dart';
 import 'package:anitocorn_open_weather_cubit/respositories/weather_repository.dart';
-
 part 'weather_state.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
