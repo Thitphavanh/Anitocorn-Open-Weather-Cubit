@@ -1,5 +1,7 @@
+import 'package:anitocorn_open_weather_cubit/cubits/temp_settings/temp_settings_cubit.dart';
 import 'package:anitocorn_open_weather_cubit/cubits/weather/weather_cubit.dart';
 import 'package:anitocorn_open_weather_cubit/pages/search_page.dart';
+import 'package:anitocorn_open_weather_cubit/pages/settings_page.dart';
 import 'package:anitocorn_open_weather_cubit/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +46,19 @@ class _HomePageState extends State<HomePage> {
               }
             },
           ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return SettingsPage();
+                  },
+                ),
+              );
+            },
+            icon: Icon(Icons.settings),
+          ),
         ],
       ),
       body: _showWeather(),
@@ -51,6 +66,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   String showTemperature(double temperature) {
+    final tempUnit = context.watch<TempSettingsCubit>().state.tempUnit;
+
+    if (tempUnit == TempUnit.fahrenheit) {
+      return ((temperature * 9 / 5 + 32).toStringAsFixed(2) + '°F');
+    }
     return temperature.toStringAsFixed(2) + '°C';
   }
 
@@ -122,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   '(${state.weather.country})',
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 30.0,
                     color: Colors.blueGrey,
                   ),
                 ),
@@ -154,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                 Column(
                   children: [
                     Text(
-                      'Max: ${state.weather.tempMax}°C',
+                      'Max: ${showTemperature(state.weather.tempMax)}',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.blue[700],
@@ -162,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(height: 10.0),
                     Text(
-                      'Min: ${state.weather.tempMin}°C',
+                      'Min: ${showTemperature(state.weather.tempMin)}',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.blue[700],

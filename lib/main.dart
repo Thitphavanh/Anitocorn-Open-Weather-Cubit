@@ -1,3 +1,5 @@
+import 'package:anitocorn_open_weather_cubit/cubits/temp_settings/temp_settings_cubit.dart';
+import 'package:anitocorn_open_weather_cubit/cubits/theme/theme_cubit.dart';
 import 'package:anitocorn_open_weather_cubit/cubits/weather/weather_cubit.dart';
 import 'package:anitocorn_open_weather_cubit/pages/home_page.dart';
 import 'package:anitocorn_open_weather_cubit/respositories/weather_repository.dart';
@@ -30,14 +32,26 @@ class MyApp extends StatelessWidget {
               weatherRepository: context.read<WeatherRepository>(),
             ),
           ),
-        ],
-        child: MaterialApp(
-          title: 'Weather App',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
+          BlocProvider<TempSettingsCubit>(
+            create: (context) => TempSettingsCubit(),
           ),
-          home: const HomePage(),
+          BlocProvider<ThemeCubit>(
+            create: (context) => ThemeCubit(
+              weatherCubit: context.read<WeatherCubit>(),
+            ),
+          ),
+        ],
+        child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Weather App',
+              debugShowCheckedModeBanner: false,
+              theme: state.appTheme == AppTheme.light
+                  ? ThemeData.light()
+                  : ThemeData.dark(),
+              home: const HomePage(),
+            );
+          },
         ),
       ),
     );
